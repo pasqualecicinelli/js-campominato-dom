@@ -1,0 +1,36 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+#griglia {
+    width: 700px;
+    aspect-ratio: 1;
+    border: 1px solid black;
+    display: flex;
+    flex-wrap: wrap;
+    background-color: yellow;
+}
+
+.campo {
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.size-10 {
+    width: calc(100%/10);
+    aspect-ratio: 1;
+}
+
+.size-9 {
+    width: calc(100%/9);
+    aspect-ratio: 1;
+}
+
+.size-7 {
+    width: calc(100%/7);
+    aspect-ratio: 1;
+}
