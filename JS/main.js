@@ -9,34 +9,29 @@
 const btnGrid = document.getElementById('btn-griglia');
 const grid = document.getElementById('griglia');
 const level = document.getElementById('livello');
-
+let min = 1;
+let arrayBomb = [];
+const bomb = 16;
 
 function generateGrid(sizeCell) {
 
     grid.innerHTML = '';
-
+    arrayBomb = [];
     const dimension = sizeCell * sizeCell;
-
 
     for (let i = 1; i <= dimension; i++) {
         let cella = document.createElement('div');
         cella.className = "campo";
 
-        if (sizeCell == 10) {
-            cella.classList.add("size-10");
-        } else if (sizeCell == 9) {
-            cella.classList.add("size-9");
-        } else if (sizeCell == 7) {
-            cella.classList.add("size-7");
-        }
+        cella.classList.add("size-" + sizeCell);
 
         cella.setAttribute('data-index', i);
         grid.appendChild(cella);
 
 
         cella.addEventListener('click', function () {
-            changeColor(cella, i);
             const index = this.getAttribute('data-index');
+            changeColor(cella, index);
             this.innerHTML = index;
         })
 
@@ -47,38 +42,33 @@ function generateGrid(sizeCell) {
 
 
 function changeColor(cell, indice) {
+
     cell.style.backgroundColor = 'azure';
-    console.log(indice);
+    console.log('azure' + indice);
+
+}
+
+function bombCell(cell, indice) {
+
+    cell.style.backgroundColor = 'red';
+    console.log('bomb' + indice);
+
 }
 
 btnGrid.addEventListener('click', function () {
     const selectLevel = parseInt(level.value);
+
+    while (arrayBomb.length < bomb) {
+        let randomBomb = getRandomNumber(min, selectLevel * selectLevel);
+
+        if (!arrayBomb.includes(randomBomb)) {
+            arrayBomb.push(randomBomb);
+        }
+
+    }
+    console.log(arrayBomb.length + ' numeri random ' + arrayBomb);
     generateGrid(selectLevel);
+
 })
 
 
-let min = 1;
-let max = 16;
-let arrayBomb = [];
-const bomb = 16;
-
-/*function getRandomNumber(min, max) {
-
-    const random = Math.floor(Math.random() * (max) + min);
-    return random;
-
-}*/
-
-
-// non funziona
-
-while (arrayBomb.length < bomb) {
-    let random = getRandomNumber(min, max);
-
-    if (random == arrayBomb[random]) {
-        getRandomNumber(min, max);
-    }
-    arrayBomb.push(random);
-    arrayBomb.lenght++;
-
-} console.log(arrayBomb.length + ' numeri random ' + arrayBomb);
