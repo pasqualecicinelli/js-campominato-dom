@@ -12,11 +12,14 @@ const level = document.getElementById('livello');
 let min = 1;
 let arrayBomb = [];
 const bomb = 16;
+let score, cellFreeTot, isGameOver;
+isGameOver = false;
 
 function generateGrid(sizeCell) {
 
     grid.innerHTML = '';
-    arrayBomb = [];
+    score = 0;
+
     const dimension = sizeCell * sizeCell;
 
     for (let i = 1; i <= dimension; i++) {
@@ -30,10 +33,40 @@ function generateGrid(sizeCell) {
 
 
         cella.addEventListener('click', function () {
+
+            // Non funziona isGameOver
+            //if (isGameOver || this.classList.contains('cell.style.backgroundColor = "azure"')) return;
+
             const index = this.getAttribute('data-index');
-            changeColor(cella, index);
-            this.innerHTML = index;
-        })
+            //console.log(i, arrayBomb, index);
+
+            if (!arrayBomb.includes(i)) {
+                changeColor(cella, index);
+                this.innerHTML = index;
+                score++;
+
+                if (score >= cellFreeTot) {
+                    endgame(
+                        'Fine partita. Hai totalizzato ' +
+                        score +
+                        " punti. Congratulazioni! E' un punteggio perfetto"
+                    );
+                }
+
+            } else {
+                bombCell(cella, i);
+                this.innerHTML = index;
+                endgame('Fine partita. Hai totalizzato ' + score + ' punti');
+            }
+
+            console.log('Il tuo punteggio è: ' + score)
+
+
+
+        });
+
+        cellFreeTot = (sizeCell * sizeCell) - arrayBomb.length;
+        console.log(cellFreeTot);
 
 
     }
@@ -41,34 +74,41 @@ function generateGrid(sizeCell) {
 }
 
 
+
 function changeColor(cell, indice) {
 
     cell.style.backgroundColor = 'azure';
-    console.log('azure' + indice);
+    console.log('azure ' + indice);
 
 }
 
 function bombCell(cell, indice) {
 
     cell.style.backgroundColor = 'red';
-    console.log('bomb' + indice);
+    console.log('bomb ' + indice);
 
 }
 
 btnGrid.addEventListener('click', function () {
+    arrayBomb = [];
     const selectLevel = parseInt(level.value);
 
     while (arrayBomb.length < bomb) {
-        let randomBomb = getRandomNumber(min, selectLevel * selectLevel);
+        let randomBomb = getRandomNumber(min, (selectLevel * selectLevel));
 
         if (!arrayBomb.includes(randomBomb)) {
             arrayBomb.push(randomBomb);
         }
-
     }
     console.log(arrayBomb.length + ' numeri random ' + arrayBomb);
+
     generateGrid(selectLevel);
 
 })
 
+function endgame(msg) {
 
+    alert(msg);
+    isGameOver = true;
+
+}
