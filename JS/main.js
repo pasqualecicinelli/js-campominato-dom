@@ -9,6 +9,7 @@
 const btnGrid = document.getElementById('btn-griglia');
 const grid = document.getElementById('griglia');
 const level = document.getElementById('livello');
+
 let min = 1;
 let arrayBomb = [];
 const bomb = 16;
@@ -34,8 +35,7 @@ function generateGrid(sizeCell) {
 
         cella.addEventListener('click', function () {
 
-            // Non funziona isGameOver
-            //if (isGameOver || this.classList.contains('cell.style.backgroundColor = "azure"')) return;
+            if (isGameOver || this.style.backgroundColor.includes("azure")) return;
 
             const index = this.getAttribute('data-index');
             //console.log(i, arrayBomb, index);
