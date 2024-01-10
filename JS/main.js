@@ -6,9 +6,9 @@
  * Al click sulla cella la coloriamo di azzuro e stampo il numero nel console.log dell'indice
  */
 
-const btnGrid = document.getElementById('btn-griglia');
-const grid = document.getElementById('griglia');
-const level = document.getElementById('livello');
+const btnGrid = document.getElementById("btn-griglia");
+const grid = document.getElementById("griglia");
+const level = document.getElementById("livello");
 
 let min = 1;
 let arrayBomb = [];
@@ -17,98 +17,80 @@ let score, cellFreeTot, isGameOver;
 isGameOver = false;
 
 function generateGrid(sizeCell) {
+  grid.innerHTML = "";
+  score = 0;
+  cellFreeTot = sizeCell * sizeCell - arrayBomb.length;
+  isGameOver = false;
+  const dimension = sizeCell * sizeCell;
 
-    grid.innerHTML = '';
-    score = 0;
+  for (let i = 1; i <= dimension; i++) {
+    let cella = document.createElement("div");
+    cella.className = "campo";
 
-    const dimension = sizeCell * sizeCell;
+    cella.classList.add("size-" + sizeCell);
 
-    for (let i = 1; i <= dimension; i++) {
-        let cella = document.createElement('div');
-        cella.className = "campo";
+    cella.setAttribute("data-index", i);
+    grid.appendChild(cella);
 
-        cella.classList.add("size-" + sizeCell);
+    cella.addEventListener("click", function () {
+      if (isGameOver || this.style.backgroundColor.includes("azure")) return;
 
-        cella.setAttribute('data-index', i);
-        grid.appendChild(cella);
+      const index = this.getAttribute("data-index");
+      //console.log(i, arrayBomb, index);
 
+      if (!arrayBomb.includes(i)) {
+        changeColor(cella, index);
+        this.innerHTML = index;
+        score++;
 
-        cella.addEventListener('click', function () {
+        if (score >= cellFreeTot) {
+          endgame(
+            "Fine partita. Hai totalizzato " +
+              score +
+              " punti. Congratulazioni! E' un punteggio perfetto"
+          );
+        }
+      } else {
+        bombCell(cella, i);
+        this.innerHTML = index;
+        endgame("Fine partita. Hai totalizzato " + score + " punti");
+      }
 
-            if (isGameOver || this.style.backgroundColor.includes("azure")) return;
+      console.log("Il tuo punteggio è: " + score);
+    });
 
-            const index = this.getAttribute('data-index');
-            //console.log(i, arrayBomb, index);
-
-            if (!arrayBomb.includes(i)) {
-                changeColor(cella, index);
-                this.innerHTML = index;
-                score++;
-
-                if (score >= cellFreeTot) {
-                    endgame(
-                        'Fine partita. Hai totalizzato ' +
-                        score +
-                        " punti. Congratulazioni! E' un punteggio perfetto"
-                    );
-                }
-
-            } else {
-                bombCell(cella, i);
-                this.innerHTML = index;
-                endgame('Fine partita. Hai totalizzato ' + score + ' punti');
-            }
-
-            console.log('Il tuo punteggio è: ' + score)
-
-
-
-        });
-
-        cellFreeTot = (sizeCell * sizeCell) - arrayBomb.length;
-        console.log(cellFreeTot);
-
-
-    }
-
+    cellFreeTot = sizeCell * sizeCell - arrayBomb.length;
+    console.log(cellFreeTot);
+  }
 }
 
-
-
 function changeColor(cell, indice) {
-
-    cell.style.backgroundColor = 'azure';
-    console.log('azure ' + indice);
-
+  cell.style.backgroundColor = "azure";
+  console.log("azure " + indice);
 }
 
 function bombCell(cell, indice) {
-
-    cell.style.backgroundColor = 'red';
-    console.log('bomb ' + indice);
-
+  cell.style.backgroundColor = "red";
+  console.log("bomb " + indice);
 }
 
-btnGrid.addEventListener('click', function () {
-    arrayBomb = [];
-    const selectLevel = parseInt(level.value);
+btnGrid.addEventListener("click", function () {
+  arrayBomb = [];
+  const selectLevel = parseInt(level.value);
 
-    while (arrayBomb.length < bomb) {
-        let randomBomb = getRandomNumber(min, (selectLevel * selectLevel));
+  while (arrayBomb.length < bomb) {
+    let randomBomb = getRandomNumber(min, selectLevel * selectLevel);
 
-        if (!arrayBomb.includes(randomBomb)) {
-            arrayBomb.push(randomBomb);
-        }
+    if (!arrayBomb.includes(randomBomb)) {
+      arrayBomb.push(randomBomb);
     }
-    console.log(arrayBomb.length + ' numeri random ' + arrayBomb);
+  }
+  console.log(arrayBomb.length + " numeri random " + arrayBomb);
 
-    generateGrid(selectLevel);
-
-})
+  generateGrid(selectLevel);
+});
 
 function endgame(msg) {
-
-    alert(msg);
-    isGameOver = true;
-
+  alert(msg);
+  isGameOver = true;
 }
